@@ -13,7 +13,8 @@
     }
     body {
       font-family: 'Vazir', Tahoma, sans-serif;
-      background: url('56.jpg');
+      background: url('56.jpg') no-repeat center center fixed;
+      background-size: cover;
       display: flex;
       justify-content: center;
       align-items: center;
@@ -22,13 +23,14 @@
       overflow: hidden;
     }
     .container {
-      background: rgba(255, 255, 255, 0.1);
-      backdrop-filter: blur(10px);
+      background: rgba(0, 0, 0, 0.85); /* مشکی نیمه شفاف */
+      backdrop-filter: blur(8px);
       padding: 40px;
       border-radius: 20px;
       text-align: center;
-      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
-      max-width: 600px , width: 90%;
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5);
+      max-width: 600px;
+      width: 90%;
       transition: opacity 0.5s ease, transform 0.5s ease;
       opacity: 0;
       transform: scale(0.8);
@@ -46,7 +48,7 @@
     input[type="text"] {
       padding: 15px;
       border-radius: 12px;
-      border: 1px solid rgba(255, 255, 255, 0.3);
+      border: none;
       background: rgba(255, 255, 255, 0.1);
       color: #fff;
       text-align: center;
@@ -60,15 +62,14 @@
     }
     input[type="text"]:focus {
       outline: none;
-      border-color: #00b4d8;
+      border: 1px solid #00b4d8;
       box-shadow: 0 0 8px rgba(0, 180, 216, 0.5);
     }
     button {
       margin: 15px 10px;
-      border-radius: none
       padding: 12px 30px;
       border: none;
-      border Complborder-radius: 12px;
+      border-radius: 12px;
       background: linear-gradient(45deg, #00b4d8, #0077b6);
       color: #fff;
       font-size: 18px;
@@ -77,23 +78,25 @@
       box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
     }
     button:hover {
-      background: lilinear-gradient(45deg, #0096c7, #023e8a);
+      background: linear-gradient(45deg, #0096c7, #023e8a);
       transform: translateY(-2px);
     }
     button:active {
       transform: translateY(0);
     }
     img {
+      display: block;
+      margin: 20px auto 0 auto; /* وسط چین کامل */
       max-width: 100%;
       width: 400px;
       height: auto;
       border-radius: 15px;
-      margin-top: 20px;
       box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
-      transition: transform 0.3s ease;
+      transition: transform 0.6s ease; /* برای انیمیشن */
     }
-    img:hover {
-      transform: scale(1.02);
+    /* وقتی صفحه دوم فعال شد عکس از کوچک به بزرگ بیاد */
+    #page2.active img {
+      transform: scale(1.1);
     }
     #error {
       color: #ff4d4d;
@@ -112,10 +115,6 @@
         width: 250px;
         font-size: 18px;
         padding: 12px;
-      }
-      button {
-        padding: 10px  Stu20px;
-        font-size: 16px;
       }
       img {
         width: 100%;
@@ -160,8 +159,7 @@
         setTimeout(() => {
           page1.style.display = 'none';
           page2.style.display = 'block';
-          page2.style.opacity = '1';
-          page2.style.transform = 'scale(1)';
+          page2.classList.add('active');
         }, 500);
         error.style.display = 'none';
       } else {
@@ -177,8 +175,7 @@
       setTimeout(() => {
         page2.style.display = 'none';
         page3.style.display = 'block';
-        page3.style.opacity = '1';
-        page3.style.transform = 'scale(1)';
+        page3.classList.add('active');
       }, 500);
     }
 
@@ -190,8 +187,7 @@
       setTimeout(() => {
         page3.style.display = 'none';
         page1.style.display = 'block';
-        page1.style.opacity = '1';
-        page1.style.transform = 'scale(1)';
+        page1.classList.add('active');
         document.getElementById('password').value = '';
       }, 500);
     }
