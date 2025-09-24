@@ -28,6 +28,7 @@
       align-items: center;
       min-height: 100vh;
       padding: 20px;
+      transition: opacity 0.5s ease;
     }
     #page1 .container {
       background: rgba(0, 0, 0, 0.85);
@@ -44,14 +45,19 @@
       background-size: cover;
       background-position: center;
       background-repeat: no-repeat;
-      height: 100vh;
+      min-height: 100vh;
       width: 100vw;
       display: none;
       position: relative;
-      overflow: hidden;
+      transition: opacity 0.5s ease;
+      padding: 20px;
     }
-    #page2 { background-image: url('001.jpg'); }
-    #page3 { background-image: url('00.jpg'); }
+    #page2 {
+      background-image: url('001.jpg');
+    }
+    #page3 {
+      background-image: url('00.jpg');
+    }
 
     /* دکمه‌ها پایین صفحه */
     .bottom-button {
@@ -75,11 +81,15 @@
       background: linear-gradient(45deg, #0096c7, #023e8a);
       transform: translate(-50%, -3px);
     }
+    .bottom-button:active {
+      transform: translate(-50%, 0);
+    }
 
     .title {
       font-size: 24px;
       margin-bottom: 20px;
       color: #e0e0e0;
+      text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
     }
 
     input[type="text"] {
@@ -95,16 +105,13 @@
       margin: 10px 0;
       letter-spacing: 5px;
       font-family: monospace;
+      transition: border-color 0.3s ease;
     }
 
     input[type="text"]:focus {
       outline: none;
       border-color: #00b4d8;
       box-shadow: 0 0 8px rgba(0, 180, 216, 0.5);
-    }
-
-    button:active {
-      transform: translateY(0);
     }
 
     #error {
@@ -115,16 +122,25 @@
 
     /* مدیا کوئری برای موبایل */
     @media (max-width: 480px) {
+      #page1, #page2, #page3 {
+        background-size: cover;
+        background-position: center;
+        min-height: 100vh;
+        padding: 10px;
+      }
+      #page1 .container {
+        padding: 20px;
+        max-width: 90%;
+      }
       .title {
         font-size: 20px;
       }
-
       input[type="text"] {
         font-size: 18px;
         padding: 12px;
+        width: 200px;
         letter-spacing: 4px;
       }
-
       .bottom-button {
         font-size: 16px;
         padding: 10px 20px;
@@ -133,15 +149,23 @@
 
     /* مدیا کوئری برای تبلت */
     @media (max-width: 768px) {
+      #page1, #page2, #page3 {
+        background-size: cover;
+        background-position: center;
+        min-height: 100vh;
+        padding: 15px;
+      }
+      #page1 .container {
+        max-width: 95%;
+      }
       .title {
         font-size: 22px;
       }
-
       input[type="text"] {
         font-size: 19px;
         padding: 14px;
+        width: 220px;
       }
-
       .bottom-button {
         font-size: 17px;
         padding: 11px 25px;
@@ -172,15 +196,29 @@
   </div>
 
   <script>
+    function convertPersianToEnglish(str) {
+      const persianNumbers = ['۰', '۱', '۲', '۳', '۴', '۵', '۶', '۷', '۸', '۹'];
+      const englishNumbers = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9'];
+      let result = str;
+      for (let i = 0; i < persianNumbers.length; i++) {
+        result = result.replace(new RegExp(persianNumbers[i], 'g'), englishNumbers[i]);
+      }
+      return result;
+    }
+
     function checkPassword() {
-      const pass = document.getElementById('password').value;
+      const pass = convertPersianToEnglish(document.getElementById('password').value);
       const page1 = document.getElementById('page1');
       const page2 = document.getElementById('page2');
       const error = document.getElementById('error');
 
       if (pass === "755533") {
-        page1.style.display = 'none';
-        page2.style.display = 'block';
+        page1.style.opacity = '0';
+        setTimeout(() => {
+          page1.style.display = 'none';
+          page2.style.display = 'block';
+          page2.style.opacity = '1';
+        }, 500);
         error.style.display = 'none';
       } else {
         error.style.display = 'block';
@@ -188,18 +226,30 @@
     }
 
     function goToPage3() {
-      document.getElementById('page2').style.display = 'none';
-      document.getElementById('page3').style.display = 'block';
+      const page2 = document.getElementById('page2');
+      const page3 = document.getElementById('page3');
+      page2.style.opacity = '0';
+      setTimeout(() => {
+        page2.style.display = 'none';
+        page3.style.display = 'block';
+        page3.style.opacity = '1';
+      }, 500);
     }
 
     function goBack() {
-      document.getElementById('page3').style.display = 'none';
-      document.getElementById('page1').style.display = 'flex';
-      document.getElementById('password').value = '';
+      const page3 = document.getElementById('page3');
+      const page1 = document.getElementById('page1');
+      page3.style.opacity = '0';
+      setTimeout(() => {
+        page3.style.display = 'none';
+        page1.style.display = 'flex';
+        page1.style.opacity = '1';
+        document.getElementById('password').value = '';
+      }, 500);
     }
 
     document.getElementById('password').addEventListener('input', function() {
-      this.value = this.value.replace(/[^0-9]/g, '');
+      this.value = this.value.replace(/[^0-9۰-۹]/g, '');
     });
 
     document.getElementById('password').addEventListener('keypress', function(e) {
