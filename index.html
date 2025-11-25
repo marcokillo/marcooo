@@ -1,263 +1,140 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="fa" dir="rtl">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>صفحه رمز مرموز</title>
-  <link href="https://v1.fontapi.ir/css/Vazir" rel="stylesheet">
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>معمای ورود</title>
   <style>
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-    }
+    :root{--bg:#0f172a;--card:#0b1220;--accent:#10b981}
+    html,body{height:100%;margin:0;font-family:Tahoma, 'Yekan', sans-serif;background:linear-gradient(180deg,#071129 0%, #071a2b 100%);color:#e6eef6}
+    .page{display:none;height:100vh;width:100vw;padding:24px;box-sizing:border-box}
+    .active{display:block}
 
-    body {
-      font-family: 'Vazir', Tahoma, sans-serif;
-      height: 100vh;
-      color: #fff;
-      overflow-x: hidden;
-      overflow-y: auto;
-      background-color: #000; /* اضافه شده برای پر کردن فضاهای خالی اطراف تصویر */
-    }
+    /* صفحه اصلی */
+    .stage{max-width:1000px;margin:30px auto;background:rgba(255,255,255,0.03);border-radius:12px;overflow:hidden;box-shadow:0 10px 30px rgba(2,6,23,0.6)}
+    .hero{position:relative;height:520px;background-size:cover;background-position:center center}
+    /* جای تصویر را اینجا با عکس خودتان جایگزین کنید */
+    .hero .replace-me{width:100%;height:100%;object-fit:cover;display:block}
 
-    /* صفحه اول */
-    #page1 {
-      background: url('56.jpg') no-repeat center center/contain; /* تغییر به contain برای نمایش کامل تصویر */
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      min-height: 100vh;
-      padding: 20px;
-      transition: opacity 0.5s ease;
-    }
-    #page1 .container {
-      background: rgba(0, 0, 0, 0.85);
-      padding: 30px;
-      border-radius: 20px;
-      text-align: center;
-      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.6);
-      max-width: 400px;
-      width: 100%;
-    }
+    /* جعبه وسط عکس */
+    .overlay-box{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);background:rgba(3,7,18,0.7);backdrop-filter:blur(4px);padding:18px;border-radius:10px;min-width:320px;box-shadow:0 8px 24px rgba(2,6,23,0.6);text-align:center}
+    .overlay-box h2{margin:0 0 10px;font-size:18px}
+    .overlay-box input{width:100%;padding:12px;border-radius:8px;border:1px solid rgba(255,255,255,0.08);background:transparent;color:inherit;font-size:16px}
+    .overlay-box button{margin-top:12px;padding:10px 14px;border-radius:8px;border:0;background:var(--accent);color:#052018;font-weight:600;cursor:pointer}
 
-    /* صفحه دوم و سوم */
-    #page2, #page3 {
-      background-size: contain; /* تغییر به contain برای نمایش کامل تصویر */
-      background-position: center;
-      background-repeat: no-repeat;
-      min-height: 100vh;
-      width: 100vw;
-      display: none;
-      position: relative;
-      transition: opacity 0.5s ease;
-      padding: 20px;
-    }
-    #page2 {
-      background-image: url('001.jpg');
-    }
-    #page3 {
-      background-image: url('00.jpg');
-    }
+    /* مودال */
+    .modal-backdrop{position:fixed;inset:0;background:rgba(0,0,0,0.6);display:flex;align-items:center;justify-content:center;z-index:60}
+    .modal{background:#071223;border-radius:12px;padding:16px;max-width:720px;width:92%;box-shadow:0 10px 40px rgba(2,6,23,0.7)}
+    .modal img{width:100%;height:360px;object-fit:cover;border-radius:8px}
+    .modal .actions{display:flex;justify-content:center;margin-top:12px}
+    .modal .actions button{padding:10px 16px;border-radius:8px;border:0;background:var(--accent);cursor:pointer;font-weight:700}
 
-    /* دکمه‌ها پایین صفحه */
-    .bottom-button {
-      position: absolute;
-      bottom: 20px;
-      left: 50%;
-      transform: translateX(-50%);
-      background: linear-gradient(45deg, #00b4d8, #0077b6);
-      border: none;
-      border-radius: 12px;
-      color: #fff;
-      font-size: 18px;
-      padding: 12px 30px;
-      cursor: pointer;
-      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
-      transition: transform 0.3s ease, background 0.3s ease;
-      max-width: 90%;
-      width: auto;
-    }
-    .bottom-button:hover {
-      background: linear-gradient(45deg, #0096c7, #023e8a);
-      transform: translate(-50%, -3px);
-    }
-    .bottom-button:active {
-      transform: translate(-50%, 0);
-    }
+    /* صفحه بعدی متن */
+    .content-wrap{max-width:900px;margin:40px auto;background:rgba(255,255,255,0.02);padding:28px;border-radius:12px}
+    .content-wrap h1{margin-top:0}
+    .scene p{line-height:1.9;margin:12px 0}
 
-    .title {
-      font-size: 24px;
-      margin-bottom: 20px;
-      color: #e0e0e0;
-      text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
-    }
-
-    input[type="text"] {
-      padding: 15px;
-      border-radius: 12px;
-      border: 1px solid rgba(255, 255, 255, 0.3);
-      background: rgba(255, 255, 255, 0.1);
-      color: #fff;
-      text-align: center;
-      font-size: 20px;
-      width: 250px;
-      max-width: 100%;
-      margin: 10px 0;
-      letter-spacing: 5px;
-      font-family: monospace;
-      transition: border-color 0.3s ease;
-    }
-
-    input[type="text"]:focus {
-      outline: none;
-      border-color: #00b4d8;
-      box-shadow: 0 0 8px rgba(0, 180, 216, 0.5);
-    }
-
-    #error {
-      color: #ff4d4d;
-      font-size: 16px;
-      margin-top: 10px;
-    }
-
-    /* مدیا کوئری برای موبایل */
-    @media (max-width: 480px) {
-      #page1, #page2, #page3 {
-        background-size: contain; /* اطمینان از نمایش کامل تصویر */
-        background-position: center;
-        min-height: 100vh;
-        padding: 10px;
-      }
-      #page1 .container {
-        padding: 20px;
-        max-width: 90%;
-      }
-      .title {
-        font-size: 20px;
-      }
-      input[type="text"] {
-        font-size: 18px;
-        padding: 12px;
-        width: 200px;
-        letter-spacing: 4px;
-      }
-      .bottom-button {
-        font-size: 16px;
-        padding: 10px 20px;
-      }
-    }
-
-    /* مدیا کوئری برای تبلت */
-    @media (max-width: 768px) {
-      #page1, #page2, #page3 {
-        background-size: contain; /* اطمینان از نمایش کامل تصویر */
-        background-position: center;
-        min-height: 100vh;
-        padding: 15px;
-      }
-      #page1 .container {
-        max-width: 95%;
-      }
-      .title {
-        font-size: 22px;
-      }
-      input[type="text"] {
-        font-size: 19px;
-        padding: 14px;
-        width: 220px;
-      }
-      .bottom-button {
-        font-size: 17px;
-        padding: 11px 25px;
-      }
-    }
+    /* ریسپانسیو */
+    @media (max-width:600px){.hero{height:420px}.modal img{height:260px}}
   </style>
 </head>
 <body>
+
   <!-- صفحه اول -->
-  <div id="page1">
-    <div class="container">
-      <div class="title">یک عدد 6 رقمی وارد کنید</div>
-      <input type="text" id="password" maxlength="6" placeholder="******">
-      <br>
-      <button onclick="checkPassword()">ورود</button>
-      <p id="error" style="display:none;">رمز اشتباه است!</p>
+  <div id="page1" class="page active">
+    <div class="stage">
+      <div class="hero" id="hero" style="background:#222">
+        <!--
+          برای جایگزینی عکس: 1) می‌توانید مسیر عکس را در attribute زیر قرار دهید
+          2) یا تگ <img class="replace-me" src="path/to/your-image.jpg"> را فعال کنید
+        -->
+        <img class="001.jpg" id="heroImg" src="/assets/placeholder-main.jpg" alt="تصویر معما (قابل جایگزینی)">
+
+        <div class="overlay-box" role="group" aria-label="ورود پاسخ">
+          <h2>پاسخ صحیح را وارد کنید</h2>
+          <input id="answerInput" inputmode="numeric" autocomplete="off" placeholder="شماره را وارد کنید...">
+          <button id="submitBtn">ارسال</button>
+          <div id="feedback" style="margin-top:8px;color:#fca5a5;display:none"></div>
+        </div>
+      </div>
     </div>
   </div>
 
-  <!-- صفحه دوم -->
-  <div id="page2">
-    <button class="bottom-button" onclick="goToPage3()">صفحه بعد</button>
+  <!-- مودال نمایش عکس جدید -->
+  <div id="modalBackdrop" class="modal-backdrop" style="display:none">
+    <div class="modal" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+      <img id="modalImg" src="002.jpg" alt="عکس جدید">
+      <div class="actions">
+        <button id="nextPageBtn">صفحه بعد</button>
+      </div>
+    </div>
   </div>
 
-  <!-- صفحه سوم -->
-  <div id="page3">
-    <button class="bottom-button" onclick="goBack()">بازگشت به صفحه ورود</button>
+  <!-- صفحه دوم (مکالمه و متن) -->
+  <div id="page2" class="page">
+    <div class="content-wrap">
+      <h1>رویدادها — صفحهٔ گفتگو</h1>
+      <div class="scene">
+        <p>چند دقیقه بعد، پیشخدمت با تئودور کینگسلی، پزشکی جوان و آراسته بازگشت. با کمک یکدیگر در را گشودند و در همان لحظه، سرمای تندی به چهره‌شان خورد.</p>
+        <p>فیلیپ مور بی‌حرکت بر تخت دراز کشیده بود. ملحفه تا سینه‌اش بالا کشیده شده بود، و ردّ خون تمام ملحفه را در بر گرفته بود.</p>
+        <p>تئودور با شتاب نزدیک رفت و بدن را معاینه کرد. پوارو در سکوت کنار او ایستاده بود، نگاهی کوتاه به دکتر انداخت و پرسید: «شما دکتر هستید، آقای کینگسلی؟»</p>
+        <p>دکتر درحالی‌که پیراهن قربانی را باز می‌کرد، گفت: «درست است، اما…شما از کجا اسم من رو میدونید؟»</p>
+        <p>پوارو آرام در اتاق قدم می‌زد، نگاهی به گوشه‌ها انداخت و پاسخ داد: «لیست تمام مهمانان هتل رو مرور کردم، آقا. حالا لطفا به من بگین… چه بر سر فیلیپ مور آمده؟»</p>
+        <p>دکتر لحظه‌ای سکوت کرد، سپس سرش را بالا آورد: «متأسفانه… اون با نه ضربه‌ی چاقو به قتل رسیده. زمان مرگ، بین ساعت دو تا سه و ربع بامداد بوده. بدون تجهیزات بیشتر، کار بیشتری از من برنمیاد.»</p>
+        <p>پوارو به‌سوی میز کنار تخت رفت. چشمش به پیپ قهوه‌ای‌رنگی افتاد، در کنار آن دستمال گردن سبز و تکه‌ای کاغذ نیم‌سوخته. با نگاهی دقیق به آن‌ها، زیر لب زمزمه کرد: «جالب شد… بسیار جالب.»</p>
+        <p>سپس رو به دکتر و پیشخدمت گفت: «هیچ‌چیز را لمس نکنید. فوراً رئیس هتل را خبر کنید.»</p>
+      </div>
+    </div>
   </div>
 
-  <script>
-    function convertPersianToEnglish(str) {
-      const persianNumbers = ['۰', '۱', '۲', '۳', '۴', '۵', '۶', '۷', '۸', '۹'];
-      const englishNumbers = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9'];
-      let result = str;
-      for (let i = 0; i < persianNumbers.length; i++) {
-        result = result.replace(new RegExp(persianNumbers[i], 'g'), englishNumbers[i]);
-      }
-      return result;
-    }
+<script>
+  (function(){
+    const CORRECT = '2031'; // پاسخ درست
+    const input = document.getElementById('answerInput');
+    const submit = document.getElementById('submitBtn');
+    const feedback = document.getElementById('feedback');
+    const modal = document.getElementById('modalBackdrop');
+    const modalImg = document.getElementById('modalImg');
+    const next = document.getElementById('nextPageBtn');
+    const page1 = document.getElementById('page1');
+    const page2 = document.getElementById('page2');
 
-    function checkPassword() {
-      const pass = convertPersianToEnglish(document.getElementById('password').value);
-      const page1 = document.getElementById('page1');
-      const page2 = document.getElementById('page2');
-      const error = document.getElementById('error');
+    // کاربر می‌تواند مسیر عکس‌ها را در اینجا تغییر دهد
+    // مثال: document.getElementById('heroImg').src = 'images/my-main-image.jpg';
+    // مثال: modalImg.src = 'images/my-success-image.jpg';
 
-      if (pass === "755533") {
-        page1.style.opacity = '0';
-        setTimeout(() => {
-          page1.style.display = 'none';
-          page2.style.display = 'block';
-          page2.style.opacity = '1';
-        }, 500);
-        error.style.display = 'none';
+    submit.addEventListener('click', tryAnswer);
+    input.addEventListener('keydown', function(e){ if(e.key === 'Enter') tryAnswer(); });
+
+    function tryAnswer(){
+      const val = input.value.trim();
+      if(!val){ showFeedback('لطفاً یک مقدار وارد کنید.'); return; }
+      if(val === CORRECT){
+        // نمایش مودال با عکس جدید — مسیر عکس را کاربر جایگزین کند
+        modalImg.src = '/assets/placeholder-success.jpg'; // کاربر این را تغییر دهد
+        modal.style.display = 'flex';
+        feedback.style.display = 'none';
       } else {
-        error.style.display = 'block';
+        showFeedback('پاسخ نادرست است — دوباره تلاش کنید.');
       }
     }
 
-    function goToPage3() {
-      const page2 = document.getElementById('page2');
-      const page3 = document.getElementById('page3');
-      page2.style.opacity = '0';
-      setTimeout(() => {
-        page2.style.display = 'none';
-        page3.style.display = 'block';
-        page3.style.opacity = '1';
-      }, 500);
-    }
+    function showFeedback(text){ feedback.textContent = text; feedback.style.display = 'block'; }
 
-    function goBack() {
-      const page3 = document.getElementById('page3');
-      const page1 = document.getElementById('page1');
-      page3.style.opacity = '0';
-      setTimeout(() => {
-        page3.style.display = 'none';
-        page1.style.display = 'flex';
-        page1.style.opacity = '1';
-        document.getElementById('password').value = '';
-      }, 500);
-    }
-
-    document.getElementById('password').addEventListener('input', function() {
-      this.value = this.value.replace(/[^0-9۰-۹]/g, '');
+    next.addEventListener('click', function(){
+      // بستن مودال و حرکت به صفحهٔ بعد
+      modal.style.display = 'none';
+      page1.classList.remove('active');
+      page2.classList.add('active');
+      // اسکرول بالا
+      window.scrollTo({top:0,behavior:'smooth'});
     });
 
-    document.getElementById('password').addEventListener('keypress', function(e) {
-      if (e.key === 'Enter') {
-        checkPassword();
-      }
-    });
-  </script>
+    //--- نکته: اگر می‌خواهید تصویرهای پیش‌فرض را تغییر دهید، مسیرهای زیر را تنظیم کنید ---
+    // document.getElementById('heroImg').src = 'path/to/your-first-image.jpg';
+    // document.getElementById('modalImg').src = 'path/to/your-modal-image.jpg';
+
+  })();
+</script>
 </body>
 </html>
