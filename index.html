@@ -3,138 +3,205 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>معمای ورود</title>
+  <title>معمای 1980</title>
   <style>
-    :root{--bg:#0f172a;--card:#0b1220;--accent:#10b981}
-    html,body{height:100%;margin:0;font-family:Tahoma, 'Yekan', sans-serif;background:linear-gradient(180deg,#071129 0%, #071a2b 100%);color:#e6eef6}
-    .page{display:none;height:100vh;width:100vw;padding:24px;box-sizing:border-box}
-    .active{display:block}
+    /* تم نوستالژیک 1980 */
+    @font-face {
+      font-family: 'Retro';
+      src: url('https://fonts.gstatic.com/s/pressstart2p/v9/e3t4euO8T-267oIAQAu6jDQyK3jW.woff2') format('woff2');
+    }
 
-    /* صفحه اصلی */
-    .stage{max-width:1000px;margin:30px auto;background:rgba(255,255,255,0.03);border-radius:12px;overflow:hidden;box-shadow:0 10px 30px rgba(2,6,23,0.6)}
-    .hero{position:relative;height:520px;background-size:cover;background-position:center center}
-    /* جای تصویر را اینجا با عکس خودتان جایگزین کنید */
-    .hero .replace-me{width:100%;height:100%;object-fit:cover;display:block}
+    body, html {
+      margin: 0;
+      padding: 0;
+      height: 100%;
+      font-family: 'Retro', monospace;
+      background: #000;
+      overflow: hidden;
+      color: #fff;
+    }
 
-    /* جعبه وسط عکس */
-    .overlay-box{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);background:rgba(3,7,18,0.7);backdrop-filter:blur(4px);padding:18px;border-radius:10px;min-width:320px;box-shadow:0 8px 24px rgba(2,6,23,0.6);text-align:center}
-    .overlay-box h2{margin:0 0 10px;font-size:18px}
-    .overlay-box input{width:100%;padding:12px;border-radius:8px;border:1px solid rgba(255,255,255,0.08);background:transparent;color:inherit;font-size:16px}
-    .overlay-box button{margin-top:12px;padding:10px 14px;border-radius:8px;border:0;background:var(--accent);color:#052018;font-weight:600;cursor:pointer}
+    /* صفحه فول اسکرین با افکت VHS */
+    .screen {
+      position: absolute;
+      inset: 0;
+      background-size: cover;
+      background-position: center;
+      filter: contrast(1.2) brightness(0.9) saturate(1.3);
+      animation: vhsFlicker 3s infinite;
+    }
+
+    @keyframes vhsFlicker {
+      0%, 100% { filter: contrast(1.2) brightness(0.9) saturate(1.3); }
+      50% { filter: contrast(1.3) brightness(1) saturate(1.5); }
+    }
+
+    .scanline {
+      position: absolute;
+      inset: 0;
+      background: repeating-linear-gradient(
+        to bottom,
+        rgba(255,255,255,0.05) 0px,
+        rgba(255,255,255,0.05) 2px,
+        rgba(0,0,0,0.05) 4px
+      );
+      pointer-events: none;
+      mix-blend-mode: overlay;
+    }
+
+    /* باکس وسط */
+    .center-box {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      background: rgba(0,0,0,0.7);
+      padding: 20px 30px;
+      border: 3px solid #00eaff;
+      border-radius: 8px;
+      text-align: center;
+      box-shadow: 0 0 20px #00eaff;
+    }
+
+    .center-box h2 {
+      font-size: 18px;
+      margin-bottom: 15px;
+      text-shadow: 0 0 8px #00eaff;
+    }
+
+    .center-box input {
+      width: 200px;
+      padding: 10px;
+      border: none;
+      outline: none;
+      background: #111;
+      color: #0ff;
+      font-family: 'Retro';
+      text-align: center;
+      border: 2px solid #0ff;
+    }
+
+    .center-box button {
+      margin-top: 14px;
+      padding: 10px 20px;
+      background: #0ff;
+      border: none;
+      cursor: pointer;
+      font-family: 'Retro';
+      color: #000;
+      box-shadow: 0 0 12px #0ff;
+    }
 
     /* مودال */
-    .modal-backdrop{position:fixed;inset:0;background:rgba(0,0,0,0.6);display:flex;align-items:center;justify-content:center;z-index:60}
-    .modal{background:#071223;border-radius:12px;padding:16px;max-width:720px;width:92%;box-shadow:0 10px 40px rgba(2,6,23,0.7)}
-    .modal img{width:100%;height:360px;object-fit:cover;border-radius:8px}
-    .modal .actions{display:flex;justify-content:center;margin-top:12px}
-    .modal .actions button{padding:10px 16px;border-radius:8px;border:0;background:var(--accent);cursor:pointer;font-weight:700}
+    .modal {
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.85);
+      display: none;
+      justify-content: center;
+      align-items: center;
+    }
 
-    /* صفحه بعدی متن */
-    .content-wrap{max-width:900px;margin:40px auto;background:rgba(255,255,255,0.02);padding:28px;border-radius:12px}
-    .content-wrap h1{margin-top:0}
-    .scene p{line-height:1.9;margin:12px 0}
+    .modal-box {
+      background: #000;
+      padding: 20px;
+      border: 3px solid #ff00ea;
+      box-shadow: 0 0 20px #ff00ea;
+      text-align: center;
+    }
 
-    /* ریسپانسیو */
-    @media (max-width:600px){.hero{height:420px}.modal img{height:260px}}
+    .modal-box img {
+      width: 80vw;
+      max-width: 600px;
+      border: 2px solid #ff00ea;
+    }
+
+    .modal-box button {
+      margin-top: 15px;
+      padding: 10px 20px;
+      background: #ff00ea;
+      border: none;
+      color: white;
+      cursor: pointer;
+      font-family: 'Retro';
+      box-shadow: 0 0 12px #ff00ea;
+    }
+
+    /* صفحه دوم */
+    #page2 {
+      display: none;
+      position: absolute;
+      inset: 0;
+      overflow-y: auto;
+      padding: 30px;
+      background: #000;
+      color: #0ff;
+      line-height: 2;
+      font-size: 16px;
+      text-shadow: 0 0 6px #0ff;
+    }
+
   </style>
 </head>
 <body>
 
-  <!-- صفحه اول -->
-  <div id="page1" class="page active">
-    <div class="stage">
-      <div class="hero" id="hero" style="background:#222">
-        <!--
-          برای جایگزینی عکس: 1) می‌توانید مسیر عکس را در attribute زیر قرار دهید
-          2) یا تگ <img class="replace-me" src="path/to/your-image.jpg"> را فعال کنید
-        -->
-        <img class="replace-me" id="heroImg" src="001.jpg" alt="تصویر معما (قابل جایگزینی)">
+  <!-- صفحه اول کاملاً با عکس پر می‌شود -->
+  <div id="page1">
+    <div class="screen" id="bg1" style="background-image:url('001.jpg')"></div>
+    <div class="scanline"></div>
 
-        <div class="overlay-box" role="group" aria-label="ورود پاسخ">
-          <h2>پاسخ صحیح را وارد کنید</h2>
-          <input id="answerInput" inputmode="numeric" autocomplete="off" placeholder="شماره را وارد کنید...">
-          <button id="submitBtn">ارسال</button>
-          <div id="feedback" style="margin-top:8px;color:#fca5a5;display:none"></div>
-        </div>
-      </div>
+    <div class="center-box">
+      <h2>پاسخ صحیح را وارد کنید</h2>
+      <input id="answerInput" placeholder="----" maxlength="4">
+      <button id="submitBtn">تأیید</button>
+      <div id="feedback" style="color:#f44;margin-top:10px;display:none"></div>
     </div>
   </div>
 
-  <!-- مودال نمایش عکس جدید -->
-  <div id="modalBackdrop" class="modal-backdrop" style="display:none">
-    <div class="modal" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
-      <img id="modalImg" src="002.jpg" alt="عکس جدید">
-      <div class="actions">
-        <button id="nextPageBtn">صفحه بعد</button>
-      </div>
+  <!-- مودال -->
+  <div id="modal" class="modal">
+    <div class="modal-box">
+      <img id="modalImg" src="002.jpg">
+      <button id="nextBtn">صفحه بعد →</button>
     </div>
   </div>
 
-  <!-- صفحه دوم (مکالمه و متن) -->
-  <div id="page2" class="page">
-    <div class="content-wrap">
-      <h1>رویدادها — صفحهٔ گفتگو</h1>
-      <div class="scene">
-        <p>چند دقیقه بعد، پیشخدمت با تئودور کینگسلی، پزشکی جوان و آراسته بازگشت. با کمک یکدیگر در را گشودند و در همان لحظه، سرمای تندی به چهره‌شان خورد.</p>
-        <p>فیلیپ مور بی‌حرکت بر تخت دراز کشیده بود. ملحفه تا سینه‌اش بالا کشیده شده بود، و ردّ خون تمام ملحفه را در بر گرفته بود.</p>
-        <p>تئودور با شتاب نزدیک رفت و بدن را معاینه کرد. پوارو در سکوت کنار او ایستاده بود، نگاهی کوتاه به دکتر انداخت و پرسید: «شما دکتر هستید، آقای کینگسلی؟»</p>
-        <p>دکتر درحالی‌که پیراهن قربانی را باز می‌کرد، گفت: «درست است، اما…شما از کجا اسم من رو میدونید؟»</p>
-        <p>پوارو آرام در اتاق قدم می‌زد، نگاهی به گوشه‌ها انداخت و پاسخ داد: «لیست تمام مهمانان هتل رو مرور کردم، آقا. حالا لطفا به من بگین… چه بر سر فیلیپ مور آمده؟»</p>
-        <p>دکتر لحظه‌ای سکوت کرد، سپس سرش را بالا آورد: «متأسفانه… اون با نه ضربه‌ی چاقو به قتل رسیده. زمان مرگ، بین ساعت دو تا سه و ربع بامداد بوده. بدون تجهیزات بیشتر، کار بیشتری از من برنمیاد.»</p>
-        <p>پوارو به‌سوی میز کنار تخت رفت. چشمش به پیپ قهوه‌ای‌رنگی افتاد، در کنار آن دستمال گردن سبز و تکه‌ای کاغذ نیم‌سوخته. با نگاهی دقیق به آن‌ها، زیر لب زمزمه کرد: «جالب شد… بسیار جالب.»</p>
-        <p>سپس رو به دکتر و پیشخدمت گفت: «هیچ‌چیز را لمس نکنید. فوراً رئیس هتل را خبر کنید.»</p>
-      </div>
-    </div>
+  <!-- صفحه دوم -->
+  <div id="page2">
+    <h1>ادامه داستان</h1>
+    <p>چند دقیقه بعد، پیشخدمت با تئودور کینگسلی...</p>
+    <p>فیلیپ مور بی‌حرکت بر تخت...</p>
+    <p>پوارو در سکوت کنار او ایستاده بود...</p>
+    <p>متأسفانه… اون با نه ضربه...</p>
+    <p>هیچ‌چیز را لمس نکنید. فوراً رئیس هتل را خبر کنید.</p>
   </div>
 
-<script>
-  (function(){
-    const CORRECT = '2031'; // پاسخ درست
-    const input = document.getElementById('answerInput');
-    const submit = document.getElementById('submitBtn');
-    const feedback = document.getElementById('feedback');
-    const modal = document.getElementById('modalBackdrop');
-    const modalImg = document.getElementById('modalImg');
-    const next = document.getElementById('nextPageBtn');
-    const page1 = document.getElementById('page1');
-    const page2 = document.getElementById('page2');
+  <script>
+    const correct = "2031";
+    const input = document.getElementById("answerInput");
+    const btn = document.getElementById("submitBtn");
+    const feedback = document.getElementById("feedback");
+    const modal = document.getElementById("modal");
+    const next = document.getElementById("nextBtn");
+    const page1 = document.getElementById("page1");
+    const page2 = document.getElementById("page2");
 
-    // کاربر می‌تواند مسیر عکس‌ها را در اینجا تغییر دهد
-    // مثال: document.getElementById('heroImg').src = 'images/my-main-image.jpg';
-    // مثال: modalImg.src = 'images/my-success-image.jpg';
-
-    submit.addEventListener('click', tryAnswer);
-    input.addEventListener('keydown', function(e){ if(e.key === 'Enter') tryAnswer(); });
-
-    function tryAnswer(){
-      const val = input.value.trim();
-      if(!val){ showFeedback('لطفاً یک مقدار وارد کنید.'); return; }
-      if(val === CORRECT){
-        // نمایش مودال با عکس جدید — مسیر عکس را کاربر جایگزین کند
-        modalImg.src = '/assets/placeholder-success.jpg'; // کاربر این را تغییر دهد
-        modal.style.display = 'flex';
-        feedback.style.display = 'none';
+    btn.onclick = () => {
+      if (input.value === correct) {
+        feedback.style.display = "none";
+        modal.style.display = "flex";
       } else {
-        showFeedback('پاسخ نادرست است — دوباره تلاش کنید.');
+        feedback.innerText = "پاسخ اشتباه است!";
+        feedback.style.display = "block";
       }
-    }
+    };
 
-    function showFeedback(text){ feedback.textContent = text; feedback.style.display = 'block'; }
+    next.onclick = () => {
+      modal.style.display = "none";
+      page1.style.display = "none";
+      page2.style.display = "block";
+    };
+  </script>
 
-    next.addEventListener('click', function(){
-      // بستن مودال و حرکت به صفحهٔ بعد
-      modal.style.display = 'none';
-      page1.classList.remove('active');
-      page2.classList.add('active');
-      // اسکرول بالا
-      window.scrollTo({top:0,behavior:'smooth'});
-    });
-
-    //--- نکته: اگر می‌خواهید تصویرهای پیش‌فرض را تغییر دهید، مسیرهای زیر را تنظیم کنید ---
-    // document.getElementById('heroImg').src = 'path/to/your-first-image.jpg';
-    // document.getElementById('modalImg').src = 'path/to/your-modal-image.jpg';
-
-  })();
-</script>
 </body>
 </html>
